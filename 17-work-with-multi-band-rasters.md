@@ -49,12 +49,14 @@ RGB_band1_TUD <- rast("data/tudlib-rgb.tif", lyrs = 1)
 We need to convert this data to a data frame in order to plot it with `ggplot`.
 
 ``` r
-RGB_band1_TUD_df  <- as.data.frame(RGB_band1_TUD, xy = TRUE)
+RGB_band1_TUD_df <- as.data.frame(RGB_band1_TUD, xy = TRUE)
 
 # Plotting this can take up to 1 minute
 ggplot() +
-  geom_raster(data = RGB_band1_TUD_df,
-              aes(x = x, y = y, alpha = `tudlib-rgb_1`)) + 
+  geom_raster(
+    data = RGB_band1_TUD_df,
+    aes(x = x, y = y, alpha = `tudlib-rgb_1`)
+  ) +
   coord_equal()
 ```
 
@@ -81,9 +83,11 @@ RGB_band2_TUD <- rast("data/tudlib-rgb.tif", lyrs = 2)
 RGB_band2_TUD_df <- as.data.frame(RGB_band2_TUD, xy = TRUE)
 
 ggplot() +
-  geom_raster(data = RGB_band2_TUD_df,
-              aes(x = x, y = y, alpha = `tudlib-rgb_2`)) + 
-  coord_equal() 
+  geom_raster(
+    data = RGB_band2_TUD_df,
+    aes(x = x, y = y, alpha = `tudlib-rgb_2`)
+  ) +
+  coord_equal()
 ```
 
 <img src="fig/17-work-with-multi-band-rasters-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
@@ -109,7 +113,7 @@ RGB_stack_TUD
 
 ``` output
 class       : SpatRaster 
-dimensions  : 4988, 4866, 3  (nrow, ncol, nlyr)
+size        : 4988, 4866, 3  (nrow, ncol, nlyr)
 resolution  : 0.08, 0.08  (x, y)
 extent      : 85272, 85661.28, 446295.2, 446694.2  (xmin, xmax, ymin, ymax)
 coord. ref. : Amersfoort / RD New (EPSG:28992) 
@@ -125,7 +129,7 @@ RGB_stack_TUD[[2]]
 
 ``` output
 class       : SpatRaster 
-dimensions  : 4988, 4866, 1  (nrow, ncol, nlyr)
+size        : 4988, 4866, 1  (nrow, ncol, nlyr)
 resolution  : 0.08, 0.08  (x, y)
 extent      : 85272, 85661.28, 446295.2, 446694.2  (xmin, xmax, ymin, ymax)
 coord. ref. : Amersfoort / RD New (EPSG:28992) 
@@ -159,8 +163,10 @@ Let’s create a raster plot of the second band:
 ``` r
 # Plotting this can take up to 1 minute
 ggplot() +
-  geom_raster(data = RGB_stack_TUD_df,
-              aes(x = x, y = y, alpha = `tudlib-rgb_2`)) + 
+  geom_raster(
+    data = RGB_stack_TUD_df,
+    aes(x = x, y = y, alpha = `tudlib-rgb_2`)
+  ) +
   coord_equal()
 ```
 
@@ -182,7 +188,8 @@ Let’s plot our 3-band image. Note that we can use the `plotRGB()` function dir
 
 ``` r
 plotRGB(RGB_stack_TUD,
-        r = 1, g = 2, b = 3)
+  r = 1, g = 2, b = 3
+)
 ```
 
 <img src="fig/17-work-with-multi-band-rasters-rendered-plot-rgb-1.png" style="display: block; margin: auto;" />

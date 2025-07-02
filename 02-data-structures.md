@@ -15,16 +15,15 @@ exercises: 2
 
 After completing this episode, participants should be able to…
 
-- To be aware of the different types of data.
-- To begin exploring data frames, and understand how they are related to vectors, factors and lists.
-- To be able to ask questions from R about the type, class, and structure of an object.
+- Understand different types of data.
+- Explore data frames and understand how they are related to vectors, factors and lists.
+- Ask questions from R about the type, class, and structure of an object.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Vectors 
-So far we've looked at individual values, such as x <- 100. Now we will move to a data structure 
-called vectors. Vectors are arrays of values of the same data type. So now we combine multiple values into one object:
-x <- c(100, 200)
+So far we've looked at individual values, such as `x <- 100`. Now we will move to a data structure called vectors. Vectors are arrays of values of the same data type. So now we combine multiple values into one object:
+`x <- c(100, 200)`
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -36,7 +35,7 @@ It can be:
 - `numerical` (a number)
 - `integer` (a number without information about decimal points)
 - `logical` (a boolean - are values TRUE or FALSE?)
-- `character` (a text/ string of characters)
+- `character` (a text, also referred to as a string of characters)
 - `complex` (a complex number)
 - `raw` (raw bytes)
 
@@ -64,14 +63,13 @@ Note that vector data in the geospatial context is different from vector data ty
 
 You can create a vector with a `c()` function. 
 
-You can inspect vectors with the `str()` function. In factor vectors, 
-it shows the underlying values of each category. 
+You can inspect vectors with the `str()` function.
 You can also see the structure in the environment tab of RStudio.
 
 
 ``` r
 # vector of numbers - numeric data type.
-numeric_vector <- c(2, 6, 3) 
+numeric_vector <- c(2, 6, 3)
 numeric_vector
 ```
 
@@ -88,7 +86,9 @@ str(numeric_vector)
 ```
 
 ``` r
-# vector of words - or strings of characters- character data type. Note that we need to use quotation marks '' to tell R that we are working with strings. If there is a ' mark in the string itself, such as s'Gravenhage, then we use "".
+# vector of words or strings of characters - character data type.
+# Note that we need to use quotation marks '' to tell R that we are
+# working with strings. 
 character_vector <- c('Amsterdam', "'s Gravenhage", 'Delft') 
 character_vector
 ```
@@ -106,8 +106,8 @@ str(character_vector)
 ```
 
 ``` r
-# vector of logical values (is something true or false?)- logical data type.
-logical_vector <- c(TRUE, FALSE, TRUE) 
+# vector of logical values (is something true or false?) - logical data type.
+logical_vector <- c(TRUE, FALSE, TRUE)
 logical_vector
 ```
 
@@ -123,13 +123,50 @@ str(logical_vector)
  logi [1:3] TRUE FALSE TRUE
 ```
 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: callout
+
+### Which quotation marks to use? 
+
+In R, you can use both single `''` and double `""` quotation marks for strings.
+However, **best practice is to use double quotes** by default.
+
+Use single quotes when the text inside the string contains double quotes —
+this tells R that the double quotation mark is part of the string, not the code.
+
+**Why** double quotes?
+
+Single quotes are often part of names or words (e.g., 's Gravenhage),
+so using double quotes keeps your code cleaner and more consistent.
+
+Preferred: 
+
+``` r
+c("Amsterdam", "'s Gravenhage", "Delft")
+```
+
+``` output
+[1] "Amsterdam"     "'s Gravenhage" "Delft"        
+```
+
+Avoid:
+
+``` r
+c('Amsterdam', "'s Gravenhage", 'Delft')
+```
+
+``` output
+[1] "Amsterdam"     "'s Gravenhage" "Delft"        
+```
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 ### Combining vectors 
 
 The combine function, `c()`, will also append things to an existing vector:
 
 
 ``` r
-ab_vector <- c('a', 'b')
+ab_vector <- c("a", "b")
 ab_vector
 ```
 
@@ -138,7 +175,7 @@ ab_vector
 ```
 
 ``` r
-abcd_vector <- c(ab_vector, 'c', 'd')
+abcd_vector <- c(ab_vector, "c", "d")
 abcd_vector
 ```
 
@@ -172,7 +209,7 @@ A common operation you want to perform is to remove all the missing values
 
 
 ``` r
-with_na <- c(1, 2, 1, 1, NA, 3, NA ) # vector including missing value
+with_na <- c(1, 2, 1, 1, NA, 3, NA) # vector including missing values
 ```
 
 First, let's try to calculate mean for the values in this vector
@@ -186,9 +223,9 @@ mean(with_na) # mean() function cannot interpret the missing values
 ```
 
 ``` r
-# You can add the argument na.rm=TRUE to calculate the result while
+# You can add the argument na.rm = TRUE to calculate the result while
 # ignoring the missing values.
-mean(with_na, na.rm = T) 
+mean(with_na, na.rm = TRUE)
 ```
 
 ``` output
@@ -202,7 +239,7 @@ with `is.na()` function.
 
 
 ``` r
-is.na(with_na) # This will produce a vector of logical values, 
+is.na(with_na) # This will produce a vector of logical values,
 ```
 
 ``` output
@@ -213,7 +250,8 @@ is.na(with_na) # This will produce a vector of logical values,
 # stating if a statement 'This element of the vector is a missing value'
 # is true or not
 
-# to see how many values are missing in our with_na vector, we can use the sum function
+# to see how many values are missing in our with_na vector, we can use the
+# sum function
 sum(is.na(with_na))
 ```
 
@@ -231,7 +269,7 @@ sum(is.na(with_na))
 ```
 
 ``` r
-#and to sum all the non-missing values we write
+# and to sum all the non-missing values we write
 sum(!is.na(with_na))
 ```
 
@@ -245,7 +283,7 @@ Sub-setting in `R` is done with square brackets`[ ]`.
 
 
 ``` r
-without_na <- with_na[ !is.na(with_na) ] # this notation will return only
+without_na <- with_na[!is.na(with_na)] # this notation will return only
 # the elements that have TRUE on their respective positions
 
 without_na
@@ -269,12 +307,13 @@ statistics about their distribution, running regression analysis, etc.
 So you need to be very careful when treating them as strings.
 
 ### Create factors
-Once created, factors can only contain a pre-defined set of values, 
+
+Once created, factors can only contain a pre-defined set of values,
 known as levels. 
 
 
 ``` r
-nordic_str <- c('Norway', 'Sweden', 'Norway', 'Denmark', 'Sweden')
+nordic_str <- c("Norway", "Sweden", "Norway", "Denmark", "Sweden")
 nordic_str # regular character vectors printed out
 ```
 
@@ -311,6 +350,7 @@ str(nordic_cat)
 ```
 
 ### Inspect factors
+
 R will treat each unique value from a factor vector as a **level** and (silently)
 assign numerical values to it. 
 This can come in handy when performing statistical analysis. 
@@ -318,7 +358,7 @@ You can inspect and adapt levels of the factor.
 
 
 ``` r
-levels(nordic_cat) # returns all levels of a factor vector.  
+levels(nordic_cat) # returns all levels of a factor vector.
 ```
 
 ``` output
@@ -334,6 +374,7 @@ nlevels(nordic_cat) # returns number of levels in a vector
 ```
 
 ### Reorder levels
+
 Note that `R` sorts the levels in the alphabetic order, 
 not in the order of occurrence in the vector. `R` assigns value of:
 
@@ -344,7 +385,7 @@ not in the order of occurrence in the vector. `R` assigns value of:
 This is important as it can affect e.g. the order in which categories are 
 displayed in a plot or which category is taken as a baseline in a statistical model.
 
-You can reorder the categories using `factor()` function. This can be useful, for instance, to select a reference category (first level) in a regression model or for ordering legend items in a plot, rather than using the default category systematically (i.e. based on alphabetical order).
+You can reorder the categories using the `factor()` function. This can be useful, for instance, to select a reference category (first level) in a regression model or for ordering legend items in a plot, rather than using the default category systematically (i.e., based on alphabetical order).
 
 
 ``` r
@@ -368,6 +409,9 @@ Levels: Norway Denmark Sweden
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::: callout 
+
+### Reordering factors
+
 There is more than one way to reorder factors. Later in the lesson,
 we will use `fct_relevel()` function from `forcats` package to do the reordering.
 
@@ -391,6 +435,9 @@ nordic_cat
 Levels: Norway Denmark Sweden
 ```
 
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::: callout 
 
 ### Note of caution 
 
@@ -398,7 +445,6 @@ Remember that once created, factors can only contain a pre-defined set of values
 known as levels. It means that whenever you try to add something to the factor
 outside of this set, it will become an unknown/missing value detonated by
 `R` as `NA`.
-
 
 
 ``` r
@@ -426,11 +472,9 @@ Levels: Norway Denmark
 ```
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- The mostly used basic data types in R are `numeric`, `integer`, `logical`, and `character`
+- The mostly used basic data types in R are `numeric`, `integer`, `logical`, and `character`.
 - Use factors to represent categories in R.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

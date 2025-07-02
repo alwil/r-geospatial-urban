@@ -22,14 +22,13 @@ exercises: 2
 After completing this episode, participants should be able to…
 
 - Describe what a data frame is.
-- Load external data from a .csv file into a data frame.
+- Load external data from a `.csv` file into a data frame.
 - Summarize the contents of a data frame.
-- Select certain columns in a data frame with the dplyr function select.
-- Select certain rows in a data frame according to filtering conditions with the dplyr function filter.
-- Link the output of one dplyr function to the input of another function with the ‘pipe’ operator %>%.
-- Add new columns to a data frame that are functions of existing columns with mutate.
-- Use the split-apply-combine concept for data analysis.
-- Use summarize, group_by, and count to split a data frame into groups of observations, apply a summary statistics for each group, and then combine the results.
+- Select certain columns in a data frame with the `dplyr` function `select()`.
+- Select certain rows in a data frame according to filtering conditions with the `dplyr` function `filter()`.
+- Link the output of one dplyr function to the input of another function with the ‘pipe’ operator `|>`.
+- Add new columns to a data frame based on existing columns with mutate.
+- Use `summarize()`, `group_by()`, and `count()` to split a data frame into groups of observations, apply a summary statistics to each group, and then combine the results.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -50,12 +49,12 @@ For example, here is a figure depicting a data frame comprising a numeric, a cha
 
 ## Reading data
 
-`read.csv()` is a function used to read coma separated data files (`.csv` format)). There are other functions for files separated with other delimiters. 
-We're gonna read in the `gapminder` data set with information about countries' size, GDP and average life expectancy in different years.
+`read.csv()` is a function used to read comma separated data files (`.csv` format)). There are other functions for files separated with other delimiters. 
+We read in the `gapminder` data set with information about countries' size, GDP and average life expectancy in different years.
 
 
 ``` r
-gapminder <- read.csv("data/gapminder_data.csv")
+gapminder <- read.csv(here("data", "gapminder_data.csv"))
 ```
 
 ## Exploring dataset
@@ -65,7 +64,7 @@ It is important to see if all the variables (columns) have the data type that we
 
 
 ``` r
-str(gapminder) 
+str(gapminder)
 ```
 
 ``` output
@@ -89,7 +88,8 @@ There are multiple ways to explore a data set. Here are just a few examples:
 
 
 ``` r
-head(gapminder) # shows first 6  rows of the data set
+# Show first 6 rows of the data set
+head(gapminder)
 ```
 
 ``` output
@@ -103,7 +103,9 @@ head(gapminder) # shows first 6  rows of the data set
 ```
 
 ``` r
-summary(gapminder) # basic statistical information about each column.
+# Basic statistical information about each column
+# Information format differs by data type.
+summary(gapminder) 
 ```
 
 ``` output
@@ -124,9 +126,8 @@ summary(gapminder) # basic statistical information about each column.
 ```
 
 ``` r
-# Information format differes by data type.
-
-nrow(gapminder) # returns number of rows in a dataset
+# Return number of rows in a dataset
+nrow(gapminder)
 ```
 
 ``` output
@@ -134,7 +135,8 @@ nrow(gapminder) # returns number of rows in a dataset
 ```
 
 ``` r
-ncol(gapminder) # returns number of columns in a dataset
+# Return number of columns in a dataset
+ncol(gapminder) 
 ```
 
 ``` output
@@ -159,7 +161,18 @@ head(country_vec)
 [1] "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan"
 [6] "Afghanistan"
 ```
-Note that the calling a column with a `$` sign will return a *vector*, it's not a data frame anymore.
+
+Now you can explore distinct values from a vector with the unique() function:
+
+``` r
+head(unique(country_vec), 10)
+```
+
+``` output
+ [1] "Afghanistan" "Albania"     "Algeria"     "Angola"      "Argentina"  
+ [6] "Australia"   "Austria"     "Bahrain"     "Bangladesh"  "Belgium"    
+```
+Note that the calling a column with a `$` sign will return a *vector* - it's not a data frame anymore.
 
 
 # Data frame Manipulation with dplyr
@@ -187,17 +200,26 @@ head(year_country_gdp)
 ```
 
 ## Pipe
-Now, this is not the most common notation when working with `dplyr` package. `dplyr` offers an operator `%>%` called a pipe, which allows you build up very complicated commands in a readable way.
+Now, this is not the most common notation when working with `dplyr` package.
+`R` offers an operator `|>` called a pipe, which allows you to build up complicated commands in a readable way.
 
 
-In newer installation of `R` you can also find a notation `|>` . This pipe works in a similar way. The main difference is that you don't need to load any packages to have it available.
+::: callout
 
+# The pipe
 
-The `select()` statement with pipe would look like that:
+The `|>` operator, also called the "native pipe", was introduced in `R` version 4.1.0. 
+Before that, the `%>%` operator from the `magrittr` package was widely used. 
+The two pipes work in similar ways. 
+The main difference is that you don't need to load any packages to have the native pipe available.
+
+:::
+
+The `select()` statement with a pipe would look like that:
 
 
 ``` r
-year_country_gdp <- gapminder %>%
+year_country_gdp <- gapminder |>
   select(year, country, gdpPercap)
 
 head(year_country_gdp)
@@ -213,17 +235,21 @@ head(year_country_gdp)
 6 1977 Afghanistan  786.1134
 ```
 
-First we define data set, then - with the use of pipe we pass it on to the `select()` function. This way we can chain multiple functions together, which we will be doing now. 
+First we define the dataset, then with the use of the pipe we pass it on to the `select()` function. 
+This way we can chain multiple functions together. 
 
 ## Filter
 
-We already know how to select only the needed columns. But now, we also want to filter the rows of our data set via certain conditions with `filter()` function. Instead of doing it in separate steps, we can do it all together. 
+We already know how to select only the needed columns. 
+But now, we also want to filter the rows of our data set on certain conditions
+with the `filter()` function. Instead of doing it in separate steps, we can do it all together. 
 
-In the `gapminder` data set, we want to see the results from outside of Europe for the 21st century. 
+In the `gapminder` dataset, we want to see the results from outside of Europe for the 21st century. 
+
 
 ``` r
-year_country_gdp_euro <- gapminder %>%
-  filter(continent != "Europe" & year >= 2000) %>%
+year_country_gdp_euro <- gapminder |>
+  filter(continent != "Europe" & year >= 2000) |>
   select(year, country, gdpPercap)
 # '&' operator (AND) - both conditions must be met
 
@@ -240,18 +266,43 @@ head(year_country_gdp_euro)
 6 2007      Angola 4797.2313
 ```
 
+Let's now focus only on North American countries  
+
+``` r
+year_gdp_namerica <- year_country_gdp_euro |>
+  filter(country == "Canada" |  country == "Mexico" | country == "United States") 
+
+# '|' operator (OR) - at least one of the conditions must be met
+
+head(year_gdp_namerica)
+```
+
+``` output
+  year       country gdpPercap
+1 2002        Canada  33328.97
+2 2007        Canada  36319.24
+3 2002        Mexico  10742.44
+4 2007        Mexico  11977.57
+5 2002 United States  39097.10
+6 2007 United States  42951.65
+```
+
 ::: challenge
 
 ##  Challenge: filtered data frame
 
-Write a single command (which can span multiple lines and includes pipes) that will produce a data frame that has the values for life expectancy, country and year, only for Eurasia. How many rows does your data frame have and why? 
+Write a single command (which can span multiple lines and includes pipes) 
+that will produce a data frame that has the values for **life expectancy**, 
+**country** and **year**, only for **EurAsia**. 
+
+How many rows does your data frame have and why? 
 
 ::: solution
 
 
 ```{.r .bg-info}
-year_country_gdp_eurasia <- gapminder %>%
-  filter(continent == "Europe" | continent == "Asia") %>%
+year_country_gdp_eurasia <- gapminder |>
+  filter(continent == "Europe" | continent == "Asia") |>
   select(year, country, gdpPercap)
 # '|' operator (OR) - one of the conditions must be met
 
@@ -267,12 +318,12 @@ nrow(year_country_gdp_eurasia)
 :::
 
 ## Group and summarize
-So far, we have provided summary statistics on the whole dataset, selected columns, and filtered the observations. But often instead of doing that, we would like to know statistics about all of the continents, presented by group.
+So far, we have provided summary statistics on the whole dataset, selected columns, and filtered the observations. But often instead of doing that, we would like to know statistics by group. Let's calculate the average GDP per capita by continent.
 
 
 ``` r
-gapminder %>% # select the dataset
-  group_by(continent) %>% # group by continent
+gapminder |> # select the dataset
+  group_by(continent) |> # group by continent
   summarize(avg_gdpPercap = mean(gdpPercap)) # create basic stats
 ```
 
@@ -299,11 +350,11 @@ Calculate the average life expectancy per country. Which country has the longest
 
 
 ```{.r .bg-info}
-gapminder %>%
-  group_by(country) %>%
-  summarize(avg_lifeExp = mean(lifeExp)) %>%
+gapminder |>
+  group_by(country) |>
+  summarize(avg_lifeExp = mean(lifeExp)) |>
   filter(avg_lifeExp == min(avg_lifeExp) |
-    avg_lifeExp == max(avg_lifeExp))
+           avg_lifeExp == max(avg_lifeExp))
 ```
 
 ``` output
@@ -323,8 +374,8 @@ You can also group by multiple columns:
 
 
 ``` r
-gapminder %>%
-  group_by(continent, year) %>%
+gapminder |>
+  group_by(continent, year) |>
   summarize(avg_gdpPercap = mean(gdpPercap))
 ```
 
@@ -349,8 +400,8 @@ gapminder %>%
 On top of this, you can also make multiple summaries of those groups:
 
 ``` r
-gdp_pop_bycontinents_byyear <- gapminder %>%
-  group_by(continent, year) %>%
+gdp_pop_bycontinents_byyear <- gapminder |>
+  group_by(continent, year) |>
   summarize(
     avg_gdpPercap = mean(gdpPercap),
     sd_gdpPercap = sd(gdpPercap),
@@ -358,6 +409,21 @@ gdp_pop_bycontinents_byyear <- gapminder %>%
     sd_pop = sd(pop),
     n_obs = n()
   )
+
+head(gdp_pop_bycontinents_byyear)
+```
+
+``` output
+# A tibble: 6 × 7
+# Groups:   continent [1]
+  continent  year avg_gdpPercap sd_gdpPercap  avg_pop    sd_pop n_obs
+  <chr>     <int>         <dbl>        <dbl>    <dbl>     <dbl> <int>
+1 Africa     1952         1253.         983. 4570010.  6317450.    52
+2 Africa     1957         1385.        1135. 5093033.  7076042.    52
+3 Africa     1962         1598.        1462. 5702247.  7957545.    52
+4 Africa     1967         2050.        2848. 6447875.  8985505.    52
+5 Africa     1972         2340.        3287. 7305376. 10130833.    52
+6 Africa     1977         2586.        4142. 8328097. 11585184.    52
 ```
 
 ## Frequencies
@@ -365,21 +431,17 @@ gdp_pop_bycontinents_byyear <- gapminder %>%
 If you need only a number of observations per group, you can use the `count()` function
 
 ``` r
-gapminder %>%
-  group_by(continent) %>%
-  count()
+gapminder |>
+  count(continent)
 ```
 
 ``` output
-# A tibble: 5 × 2
-# Groups:   continent [5]
-  continent     n
-  <chr>     <int>
-1 Africa      624
-2 Americas    300
-3 Asia        396
-4 Europe      360
-5 Oceania      24
+  continent   n
+1    Africa 624
+2  Americas 300
+3      Asia 396
+4    Europe 360
+5   Oceania  24
 ```
  
 
@@ -389,7 +451,7 @@ Frequently you’ll want to create new columns based on the values in existing c
 
 
 ``` r
-gapminder_gdp <- gapminder %>%
+gapminder_gdp <- gapminder |>
   mutate(gdpBillion = gdpPercap * pop / 10^9)
 
 head(gapminder_gdp)
@@ -410,7 +472,7 @@ head(gapminder_gdp)
 
 - We can use the `select()` and `filter()` functions to select certain columns in a data frame and to subset it based a specific conditions.
 - With `mutate()`, we can create new columns in a data frame with values based on existing columns.
-- By combining `group_by()` and `summarize()` in a pipe (`%>%`) chain,  we can generate summary statistics for each group in a data frame.
+- By combining `group_by()` and `summarize()` in a pipe (`|>`) chain,  we can generate summary statistics for each group in a data frame.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -41,8 +41,8 @@ First we need to load the packages we will use in this lesson. We will use the `
 
 
 ``` r
-library(tidyverse)  # wrangle, reshape and visualize data
-library(sf)         # work with spatial vector data
+library(tidyverse) # wrangle, reshape and visualize data
+library(sf) # work with spatial vector data
 ```
 
 ::: callout
@@ -259,6 +259,8 @@ Projected CRS: Amersfoort / RD New
 ```
 
 ::: callout
+
+# More about CRS
 
 Read more about Coordinate Reference Systems [in the previous episode](../episodes/08-intro-to-geospatial-concepts.Rmd). We will also practice transformation between CRS in [Handling Spatial Projection & CRS](../episodes/12-handling-spatial-projection-and-crs.Rmd).
 

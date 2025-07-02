@@ -141,7 +141,7 @@ DSM_TUD
 
 ``` output
 class       : SpatRaster 
-dimensions  : 386, 722, 1  (nrow, ncol, nlyr)
+size        : 386, 722, 1  (nrow, ncol, nlyr)
 resolution  : 5, 5  (x, y)
 extent      : 83565, 87175, 445250, 447180  (xmin, xmax, ymin, ymax)
 coord. ref. : Amersfoort / RD New (EPSG:28992) 
@@ -214,9 +214,9 @@ We can use `ggplot()` to plot this data with a specific `geom_` function called 
 
 ``` r
 ggplot() +
-    geom_raster(data = DSM_TUD_df , aes(x = x, y = y, fill = `tud-dsm-5m`)) +
-    scale_fill_viridis_c(option = "turbo") +
-    coord_equal() 
+  geom_raster(data = DSM_TUD_df, aes(x = x, y = y, fill = `tud-dsm-5m`)) +
+  scale_fill_viridis_c(option = "turbo") +
+  coord_equal()
 ```
 
 <div class="figure" style="text-align: center">
